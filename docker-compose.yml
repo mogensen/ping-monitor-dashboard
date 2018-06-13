@@ -1,0 +1,22 @@
+version: "3"
+services:
+  humio:
+    image: humio/humio
+    ports:
+      - 8081:8080
+  pinger_dr:
+    image: mogensen/ping-as-a-service
+    environment:
+      - PINGHOST=dr.dk
+  pinger_google:
+    image: mogensen/ping-as-a-service
+    environment:
+      - PINGHOST=google.com
+  pinger_1_1_1_1:
+    image: mogensen/ping-as-a-service
+    environment:
+      - PINGHOST=1.1.1.1
+  pinger_8_8_8_8:
+    image: mogensen/ping-as-a-service
+    environment:
+      - PINGHOST=8.8.8.8
