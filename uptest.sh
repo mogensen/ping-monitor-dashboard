@@ -8,7 +8,7 @@ fi
 Silence="$HOME/.local/share/nbsdata/SILENCE"
 SleepDefault=5
 LogfileDefault="$HOME/.local/share/nbsdata/uptest.log"
-TimeoutDefault=1
+TimeoutDefault=5
 PingHost=google.com
 
 Usage="Usage: $(basename $0) [sleep seconds [-l [logfile]] [-h host]
@@ -80,10 +80,10 @@ while [[ 1 ]]; do
       echo -e "Error: time regex failed to match line:\n$response" 1>&2
       ms=0
     fi
-    result="$ms ms\tfrom $dest"
+    result="$ms ms\tfrom $dest\tfor host $PingHost"
     logline="{\"attributes\":{\"status\":\"OK\", \"ping\":\"$ms\", \"destination\":\"$dest\", \"host\":\"$PingHost\"}"
   else
-    result="**********DROPPED**********"
+    result="**********DROPPED********** for host $PingHost"
     logline="{\"attributes\":{\"status\":\"DROPPED\", \"ping\":\"0\", \"destination\":\"\", \"host\":\"$PingHost\"}"
     #sleeptime=5
   fi
@@ -102,6 +102,7 @@ while [[ 1 ]]; do
     #   echo -e "$logline" >> "$logfile"
     # fi
     echo "$logline"
+    echo -e "$result"  1>&2;
 
     ratio=$((ratio-1))
     if [[ $ratio -gt 0 ]]; then
